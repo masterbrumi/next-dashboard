@@ -4,8 +4,15 @@ import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
 import {lusitana} from '@/app/ui/fonts';
 import {Suspense} from "react";
 import {LatestInvoicesSkeleton, RevenueChartSkeleton, CardsSkeleton} from "@/app/ui/skeletons";
+import {getServerSession} from "next-auth/next";
+import {options} from "@/app/api/auth/[...nextauth]/options";
+import {redirect} from "next/navigation";
 
 export default async function Page() {
+    const session = await getServerSession(options)
+    if (!session) {
+        redirect('/api/auth/signin?callbackUrl=/dashboard');
+    }
     return (
         <main>
             <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
